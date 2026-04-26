@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ms-auth
+  description: Microservico de autenticacao e autorizacao do FinanceOS
+  tags: [java, spring-boot, security, jwt]
+spec:
+  type: service
+  lifecycle: development
+  owner: user:mauriciomarqs
+  providesApis: [auth-api]

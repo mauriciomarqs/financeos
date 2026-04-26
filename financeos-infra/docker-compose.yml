@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: financeos-postgres
+    environment:
+      POSTGRES_DB: financeos
+      POSTGRES_USER: financeos_user
+      POSTGRES_PASSWORD: financeos_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U financeos_user -d financeos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ms-finance:
+    build: ../ms-finance
+    container_name: ms-finance
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/financeos
+      SPRING_DATASOURCE_USERNAME: financeos_user
+      SPRING_DATASOURCE_PASSWORD: financeos_pass
+
+  ms-auth:
+    build: ../ms-auth
+    container_name: ms-auth
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/financeos
+      SPRING_DATASOURCE_USERNAME: financeos_user
+      SPRING_DATASOURCE_PASSWORD: financeos_pass
+      JWT_SECRET: ${JWT_SECRET}
+
+  ms-ai-agent:
+    build: ../ms-ai-agent
+    container_name: ms-ai-agent
+    ports:
+      - "8083:8083"
+    depends_on:
+      - ms-finance
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      MS_FINANCE_URL: http://ms-finance:8081
+
+volumes:
+  postgres_data:

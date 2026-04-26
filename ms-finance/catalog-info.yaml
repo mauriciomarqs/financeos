@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ms-finance
+  description: Microservico financeiro do FinanceOS
+  tags: [java, spring-boot, finance]
+spec:
+  type: service
+  lifecycle: development
+  owner: user:mauriciomarqs
+  providesApis: [finance-api]

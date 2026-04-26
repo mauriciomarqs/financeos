@@ -1,0 +1,17 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: ms-auth
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/financeos}
+    username: ${SPRING_DATASOURCE_USERNAME:financeos_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:financeos_pass}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: ${JWT_SECRET:financeos-secret-key-development-only}
+  expiration: 86400000 # 24h em ms

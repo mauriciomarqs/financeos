@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ms-ai-agent
+  description: Agente de IA financeiro com LangChain4j e Claude API
+  tags: [java, spring-boot, ai, langchain4j, claude]
+spec:
+  type: service
+  lifecycle: development
+  owner: user:mauriciomarqs
+  dependsOn: [component:ms-finance]

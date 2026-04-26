@@ -1,0 +1,57 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: financeos
+  description: ERP Financeiro Modular com IA
+  tags: [finance, erp, java, react]
+spec:
+  owner: user:mauriciomarqs
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ms-finance
+  description: Microservico financeiro - CRUD e relatorios
+  tags: [java, spring-boot]
+spec:
+  type: service
+  lifecycle: development
+  owner: user:mauriciomarqs
+  system: financeos
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ms-auth
+  description: Microservico de autenticacao JWT
+  tags: [java, spring-boot, security]
+spec:
+  type: service
+  lifecycle: development
+  owner: user:mauriciomarqs
+  system: financeos
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ms-ai-agent
+  description: Agente IA com LangChain4j e Claude
+  tags: [java, ai, langchain4j]
+spec:
+  type: service
+  lifecycle: development
+  owner: user:mauriciomarqs
+  system: financeos
+  dependsOn: [component:ms-finance]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: financeos-frontend
+  description: Interface React do FinanceOS
+  tags: [react, typescript, tailwind]
+spec:
+  type: website
+  lifecycle: development
+  owner: user:mauriciomarqs
+  system: financeos
