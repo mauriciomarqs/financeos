@@ -1,13 +1,13 @@
 package com.financeos.service;
 
 import com.financeos.dto.TransacaoDTO;
-import com.financeos.model.Transacao;
 import com.financeos.model.TipoTransacao;
+import com.financeos.model.Transacao;
 import com.financeos.repository.TransacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
 
@@ -60,12 +60,18 @@ public class TransacaoService {
 
     public List<Transacao> buscarPorMes(String mes) {
         YearMonth ym = YearMonth.parse(mes);
-        return repository.findByDataBetweenOrderByDataDesc(ym.atDay(1), ym.atEndOfMonth());
+        return repository.findByDataBetweenOrderByDataDesc(
+                ym.atDay(1),
+                ym.atEndOfMonth()
+        );
     }
 
     public Map<String, BigDecimal> gastosPorCategoria(String mes) {
         YearMonth ym = YearMonth.parse(mes);
-        List<Object[]> resultados = repository.findGastosPorCategoria(ym.atDay(1), ym.atEndOfMonth());
+        List<Object[]> resultados = repository.findGastosPorCategoria(
+                ym.atDay(1),
+                ym.atEndOfMonth()
+        );
         Map<String, BigDecimal> mapa = new LinkedHashMap<>();
         for (Object[] row : resultados) {
             mapa.put((String) row[0], (BigDecimal) row[1]);
@@ -75,10 +81,19 @@ public class TransacaoService {
 
     public Map<String, BigDecimal> fluxoCaixa(String mes) {
         YearMonth ym = YearMonth.parse(mes);
-        List<Transacao> receitas = repository.findByTipoAndDataBetween(TipoTransacao.RECEITA, ym.atDay(1), ym.atEndOfMonth());
-        List<Transacao> despesas = repository.findByTipoAndDataBetween(TipoTransacao.DESPESA, ym.atDay(1), ym.atEndOfMonth());
-        BigDecimal totalR = receitas.stream().map(Transacao::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal totalD = despesas.stream().map(Transacao::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<Transacao> receitas = repository.findByTipoAndDataBetween(
+                TipoTransacao.RECEITA, ym.atDay(1), ym.atEndOfMonth()
+        );
+        List<Transacao> despesas = repository.findByTipoAndDataBetween(
+                TipoTransacao.DESPESA, ym.atDay(1), ym.atEndOfMonth()
+        );
+        BigDecimal totalR = receitas.stream()
+                .map(Transacao::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalD = despesas.stream()
+                .map(Transacao::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         Map<String, BigDecimal> fluxo = new LinkedHashMap<>();
         fluxo.put("receitas", totalR);
         fluxo.put("despesas", totalD);

@@ -39,3 +39,5 @@ public class Transacao {
     @Builder.Default
     private Boolean recorrente = false;
 }
+
+
