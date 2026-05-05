@@ -1,0 +1,13 @@
+# Credenciais
+.env
+
+# Build Maven
+target/
+
+# IntelliJ
+.idea/
+*.iml
+HELP.md
+
+# macOS
+.DS_Store
